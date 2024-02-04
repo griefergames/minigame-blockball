@@ -205,7 +205,7 @@ class GameServiceImpl @Inject constructor(
     /**
      * Initialises a new game from the given arena.
      */
-    private fun initGame(arena: Arena) {
+    public fun initGame(arena: Arena) {
         val game: Game = when (arena.gameType) {
             GameType.HUBGAME -> HubGameEntity(arena)
             GameType.MINIGAME -> MiniGameEntity(arena)
