@@ -144,6 +144,7 @@ dependencies {
     compileOnly(ggcloud.paper.api)
     compileOnly(ggcloud.minigame.shared)
     compileOnly(ggcloud.minigame.server)
+    compileOnly(ggcloud.singularity.i18n.bukkit)
 
 
     testImplementation("org.xerial:sqlite-jdbc:3.23.1")
