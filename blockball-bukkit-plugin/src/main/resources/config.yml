@@ -23,7 +23,7 @@ debug: false
 # Data-collecting settings
 # This setting sends anonymous stats to https://bstats.org/plugin/bukkit/BlockBall.
 ############################
-metrics: true
+metrics: false
 
 ############################
 # Command settings

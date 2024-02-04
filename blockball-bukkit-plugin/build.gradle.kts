@@ -142,6 +142,8 @@ dependencies {
     compileOnly(ggcloud.vault.api)
     //compileOnly("org.spigotmc:spigot:1.16.4-R0.1-SNAPSHOT")
     compileOnly(ggcloud.paper.api)
+    compileOnly(ggcloud.minigame.shared)
+    compileOnly(ggcloud.minigame.server)
 
 
     testImplementation("org.xerial:sqlite-jdbc:3.23.1")

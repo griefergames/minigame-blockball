@@ -16,9 +16,14 @@ import com.github.shynixn.mcutils.packet.impl.service.PacketServiceImpl
 import com.google.inject.Guice
 import com.google.inject.Injector
 import kotlinx.coroutines.runBlocking
+import net.griefergames.minigame.event.MinigameLobbySetEvent
+import net.griefergames.minigame.unregisterEvents
 import org.bstats.bukkit.Metrics
 import org.bukkit.Bukkit
 import org.bukkit.configuration.MemorySection
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.logging.Level
 
@@ -26,10 +31,12 @@ import java.util.logging.Level
  * Plugin Main.
  * @author Shynixn
  */
-class BlockBallPlugin : JavaPlugin(), PluginProxy {
+class BlockBallPlugin : JavaPlugin(), PluginProxy, Listener {
     companion object {
         /** Final Prefix of BlockBall in the console */
         val PREFIX_CONSOLE: String = ChatColor.BLUE.toString() + "[BlockBall] "
+
+        const val MINIGAME_TAG = "blockball"
     }
 
     private var injector: Injector? = null
@@ -117,17 +124,18 @@ class BlockBallPlugin : JavaPlugin(), PluginProxy {
         this.reloadConfig()
 
         // Register Listeners
-        Bukkit.getPluginManager().registerEvents(resolve(GameListener::class.java), this)
-        Bukkit.getPluginManager().registerEvents(resolve(DoubleJumpListener::class.java), this)
-        Bukkit.getPluginManager().registerEvents(resolve(HubgameListener::class.java), this)
-        Bukkit.getPluginManager().registerEvents(resolve(MinigameListener::class.java), this)
-        Bukkit.getPluginManager().registerEvents(resolve(BungeeCordgameListener::class.java), this)
-        Bukkit.getPluginManager().registerEvents(resolve(BallListener::class.java), this)
-        Bukkit.getPluginManager().registerEvents(resolve(BlockSelectionListener::class.java), this)
+        Bukkit.getPluginManager().registerEvents(this, this)
+//        Bukkit.getPluginManager().registerEvents(resolve(GameListener::class.java), this)
+//        Bukkit.getPluginManager().registerEvents(resolve(DoubleJumpListener::class.java), this)
+//        Bukkit.getPluginManager().registerEvents(resolve(HubgameListener::class.java), this)
+//        Bukkit.getPluginManager().registerEvents(resolve(MinigameListener::class.java), this)
+//        Bukkit.getPluginManager().registerEvents(resolve(BungeeCordgameListener::class.java), this)
+//        Bukkit.getPluginManager().registerEvents(resolve(BallListener::class.java), this)
+//        Bukkit.getPluginManager().registerEvents(resolve(BlockSelectionListener::class.java), this)
 
         server.messenger.registerOutgoingPluginChannel(this, "BungeeCord")
 
-        startPlugin()
+//        startPlugin()
 
         val dependencyService = resolve(DependencyService::class.java)
         val configurationService = resolve(ConfigurationService::class.java)
@@ -167,6 +175,36 @@ class BlockBallPlugin : JavaPlugin(), PluginProxy {
             logger.log(Level.INFO, "Loaded language file $language.properties.")
             Bukkit.getServer()
                 .consoleSender.sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled BlockBall " + plugin.description.version + " by Shynixn")
+        }
+    }
+
+    @EventHandler
+    fun onLobbySet(event: MinigameLobbySetEvent) {
+        if(event.lobby.minigame.tag == MINIGAME_TAG) {
+            Bukkit.getPluginManager().registerEvents(resolve(GameListener::class.java), this)
+            Bukkit.getPluginManager().registerEvents(resolve(DoubleJumpListener::class.java), this)
+            Bukkit.getPluginManager().registerEvents(resolve(HubgameListener::class.java), this)
+            Bukkit.getPluginManager().registerEvents(resolve(MinigameListener::class.java), this)
+            Bukkit.getPluginManager().registerEvents(resolve(BungeeCordgameListener::class.java), this)
+            Bukkit.getPluginManager().registerEvents(resolve(BallListener::class.java), this)
+            Bukkit.getPluginManager().registerEvents(resolve(BlockSelectionListener::class.java), this)
+
+            startPlugin()
+
+            packetService!!.registerPacketListening(PacketInType.USEENTITY)
+            val ggMinigameListener = resolve(GrieferGamesMinigameListener::class.java)
+            Bukkit.getPluginManager().registerEvents(ggMinigameListener, this)
+            ggMinigameListener.lobbySet(event)
+        }else{
+            Bukkit.getPluginManager().unregisterEvents(this as Plugin)
+
+            //packetService?.close()
+
+            try {
+                resolve(GameService::class.java).close()
+            } catch (e: Exception) {
+                // Ignored.
+            }
         }
     }
 
@@ -240,7 +278,7 @@ class BlockBallPlugin : JavaPlugin(), PluginProxy {
      * Shutdowns the server.
      */
     override fun shutdownServer() {
-        Bukkit.getServer().shutdown()
+        //Bukkit.getServer().shutdown()
     }
 
     /**
