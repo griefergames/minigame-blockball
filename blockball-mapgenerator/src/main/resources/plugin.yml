@@ -1,0 +1,6 @@
+name: BlockMappMapGenerator
+version: ${version}
+main: net.griefergames.minigame.blockball.BlockMappMapGeneratorPlugin
+api-version: '1.20'
+depend:
+  - MiniGameSystem
