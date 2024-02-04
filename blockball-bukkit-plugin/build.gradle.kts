@@ -111,6 +111,14 @@ repositories {
     maven("https://repo.codemc.org/repository/maven-public")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://shynixn.github.io/m2/repository/mcutils")
+    maven {
+        name = "gg-repo"
+        setUrl("https://artifactory.griefergames.dev/artifactory/gg-repo")
+    }
+    maven {
+        name = "paper-repo"
+        url = uri("https://repo.papermc.io/repository/maven-public/")
+    }
 }
 
 dependencies {
@@ -131,6 +139,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.9.2")
     compileOnly("net.milkbowlvault:VaultAPI:1.7")
     compileOnly("org.spigotmc:spigot:1.16.4-R0.1-SNAPSHOT")
+    compileOnly(ggcloud.)
 
     testImplementation("org.xerial:sqlite-jdbc:3.23.1")
     testImplementation("org.spigotmc:spigot:1.16.4-R0.1-SNAPSHOT")
