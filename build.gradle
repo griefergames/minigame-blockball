@@ -17,12 +17,21 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.10'
     id 'io.codearte.nexus-staging' version '0.20.0'
     id "de.marcphilipp.nexus-publish" version '0.2.0'
+    id "net.linguica.maven-settings" version "0.5"
 }
 
 repositories {
     mavenCentral()
     mavenLocal()
     jcenter()
+    maven {
+        name = "gg-repo"
+        setUrl("https://artifactory.griefergames.dev/artifactory/gg-repo")
+    }
+    maven {
+        name = "paper-repo"
+        url = uri("https://repo.papermc.io/repository/maven-public/")
+    }
 }
 
 nexusStaging {
@@ -53,15 +62,16 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'java-library'
     apply plugin: "de.marcphilipp.nexus-publish"
+    apply plugin: "net.linguica.maven-settings"
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 17
+    targetCompatibility = 17
 
     compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "17"
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "17"
     }
 
     jacocoTestReport {

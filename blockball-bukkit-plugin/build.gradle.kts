@@ -4,6 +4,7 @@ import java.io.*
 
 plugins {
     id("com.github.johnrengelman.shadow") version ("7.0.0")
+    id("net.linguica.maven-settings") version "0.5"
 }
 
 tasks.withType<Jar> {
@@ -107,10 +108,6 @@ tasks.register("pluginJarLatest", ShadowJar::class.java) {
 
 
 repositories {
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
-    maven("https://repo.codemc.org/repository/maven-public")
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven("https://shynixn.github.io/m2/repository/mcutils")
     maven {
         name = "gg-repo"
         setUrl("https://artifactory.griefergames.dev/artifactory/gg-repo")
@@ -119,6 +116,10 @@ repositories {
         name = "paper-repo"
         url = uri("https://repo.papermc.io/repository/maven-public/")
     }
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
+    maven("https://repo.codemc.org/repository/maven-public")
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven("https://shynixn.github.io/m2/repository/mcutils")
 }
 
 dependencies {
@@ -137,12 +138,15 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
 
     compileOnly("me.clip:placeholderapi:2.9.2")
-    compileOnly("net.milkbowlvault:VaultAPI:1.7")
-    compileOnly("org.spigotmc:spigot:1.16.4-R0.1-SNAPSHOT")
-    compileOnly(ggcloud.)
+    //compileOnly("net.milkbowlvault:VaultAPI:1.7")
+    compileOnly(ggcloud.vault.api)
+    //compileOnly("org.spigotmc:spigot:1.16.4-R0.1-SNAPSHOT")
+    compileOnly(ggcloud.paper.api)
+
 
     testImplementation("org.xerial:sqlite-jdbc:3.23.1")
-    testImplementation("org.spigotmc:spigot:1.16.4-R0.1-SNAPSHOT")
+    //testImplementation("org.spigotmc:spigot:1.16.4-R0.1-SNAPSHOT")
+    testImplementation(ggcloud.paper.api)
 }
 
 tasks.register("languageFile") {

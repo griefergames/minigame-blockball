@@ -121,11 +121,11 @@ object BlockBallLanguage {
   /** &9%blockball_game_blueScore% : &c%blockball_game_redScore% **/
   var teamBlueScoreTitle : String = "&9%blockball_game_blueScore% : &c%blockball_game_redScore%"
 
-  /** &9Ingame% **/
-  var bungeeCordMotdRunning : String = "&9Ingame%"
-
   /** &9%blockball_game_lastHitPlayerName% scored for %blockball_game_blueName% **/
   var teamBlueScoreSubTitle : String = "&9%blockball_game_lastHitPlayerName% scored for %blockball_game_blueName%"
+
+  /** &9Ingame% **/
+  var bungeeCordMotdRunning : String = "&9Ingame%"
 
   /** &cRestarting... **/
   var bungeeCordMotdRestarting : String = "&cRestarting..."
@@ -154,9 +154,9 @@ object BlockBallLanguage {
   /** Game is full! Do you want to spectate? **/
   var spectateJoinHeader : String = "Game is full! Do you want to spectate?"
 
-  /** Server is already full. **/
-  var bungeeCordKickMessage : String = "Server is already full."
-
   /** Team Blue **/
   var teamBlueDisplayName : String = "Team Blue"
+
+  /** Server is already full. **/
+  var bungeeCordKickMessage : String = "Server is already full."
 }
