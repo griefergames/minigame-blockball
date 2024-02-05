@@ -139,8 +139,8 @@ class MinigameArena(
             displayName = "Red Team",
             prefix = "RED"
         ).apply {
-            val location1 = lobby.map.locations.get("team1_goal_1")?.let { MinigamePosition(it) }!!
-            val location2 = lobby.map.locations.get("team1_goal_2")?.let { MinigamePosition(it) }!!
+            val location1 = lobby.map.locations.get("red_goal_1")?.let { MinigamePosition(it) }!!
+            val location2 = lobby.map.locations.get("red_goal_2")?.let { MinigamePosition(it) }!!
             this.goal.setCorners(location1, location2)
             this.minAmount = lobby.maxPlayers
             this.maxAmount = (lobby.maxPlayers / 2)
@@ -165,8 +165,8 @@ class MinigameArena(
             displayName = "Blue Team",
             prefix = "BLUE"
         ).apply {
-            val location1 = lobby.map.locations.get("team2_goal_1")?.let { MinigamePosition(it) }!!
-            val location2 = lobby.map.locations.get("team2_goal_2")?.let { MinigamePosition(it) }!!
+            val location1 = lobby.map.locations.get("blue_goal_1")?.let { MinigamePosition(it) }!!
+            val location2 = lobby.map.locations.get("blue_goal_2")?.let { MinigamePosition(it) }!!
             this.goal.setCorners(location1, location2)
             this.minAmount = lobby.maxPlayers
             this.maxAmount = (lobby.maxPlayers / 2)

@@ -6,12 +6,15 @@ import com.github.shynixn.blockball.api.persistence.entity.Game
 import com.github.shynixn.blockball.event.GameEndEvent
 import com.github.shynixn.blockball.event.GameGoalEvent
 import com.github.shynixn.blockball.griefergames.MinigameArena
+import com.github.shynixn.blockball.griefergames.MinigamePosition
 import com.github.shynixn.blockball.impl.service.GameServiceImpl
 import com.google.inject.Inject
+import net.griefergames.minigame.event.MinigameFinishEvent
 import net.griefergames.minigame.event.MinigameLobbySetEvent
 import net.griefergames.minigame.event.MinigamePlayerJoinEvent
 import net.griefergames.minigame.event.MinigameReadyToStartEvent
 import net.griefergames.minigame.minigameService
+import net.griefergames.minigame.toBukkitGameLocation
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.i18n
 import org.bukkit.entity.Player
@@ -26,12 +29,19 @@ class GrieferGamesMinigameListener @Inject constructor(
 
     private var theGame: Game? = null
 
+    private val preSpawn by lazy {
+        minigameService.getMinigameLobby()?.map?.locations?.get("pre_spawn")
+    }
+
     fun lobbySet(event: MinigameLobbySetEvent) {
         prepareGame()
     }
 
     @EventHandler
     fun onMinigamePlayerJoin(event: MinigamePlayerJoinEvent) {
+        preSpawn?.let {
+            event.player.teleport(it.toBukkitGameLocation())
+        }
         gameActionService.joinGame(theGame!!, event.player, null)
     }
 
@@ -39,6 +49,16 @@ class GrieferGamesMinigameListener @Inject constructor(
     fun onMinigameReadyToStart(event: MinigameReadyToStartEvent) {
         theGame!!.arena.meta.redTeamMeta.minAmount = (event.lobby.maxPlayers / 2) - 1
         theGame!!.arena.meta.blueTeamMeta.minAmount = (event.lobby.maxPlayers / 2) - 1
+    }
+
+    @EventHandler
+    fun onMinigameFinish(event: MinigameFinishEvent) {
+        if(!event.regularEnding) {
+            theGame?.let {
+                gameActionService.closeGame(it)
+            }
+        }
+        runEndGame();
     }
 
     @EventHandler
@@ -62,18 +82,6 @@ class GrieferGamesMinigameListener @Inject constructor(
         updateScores();
         val winningTeam = event.winningTeam
         minigameService.setGameFinished(true)
-        val scores = mutableMapOf<UUID, Int>()
-        theGame!!.redTeam.forEach {
-            if(it is Player) {
-                scores[it.uniqueId] = theGame!!.redScore
-            }
-        }
-        theGame!!.blueTeam.forEach {
-            if(it is Player) {
-                scores[it.uniqueId] = theGame!!.blueScore
-            }
-        }
-        minigameService.setPlayerScores(scores)
     }
 
     /**
@@ -88,6 +96,21 @@ class GrieferGamesMinigameListener @Inject constructor(
         }
         (gameService as GameServiceImpl).initGame(arena)
         theGame = gameService.getAllGames().lastOrNull { it.arena == arena } ?: return
+    }
+
+    private fun runEndGame() {
+        val scores = mutableMapOf<UUID, Int>()
+        theGame!!.redTeam.forEach {
+            if(it is Player) {
+                scores[it.uniqueId] = theGame!!.redScore
+            }
+        }
+        theGame!!.blueTeam.forEach {
+            if(it is Player) {
+                scores[it.uniqueId] = theGame!!.blueScore
+            }
+        }
+        minigameService.setPlayerScores(scores)
     }
 
 }
