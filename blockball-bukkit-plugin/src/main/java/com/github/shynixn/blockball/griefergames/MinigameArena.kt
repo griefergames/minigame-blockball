@@ -45,7 +45,7 @@ class MinigameArena(
     }
 
     init {
-        val spawns = map.locations.entries.filter { it.key.startsWith("spawn_") }
+        val spawns = map.locations.entries.filter { it.key.startsWith("area_") }
         if(spawns.size >= 2) {
             setCorners(MinigamePosition(spawns.first().value), MinigamePosition(spawns.last().value))
         }else {
