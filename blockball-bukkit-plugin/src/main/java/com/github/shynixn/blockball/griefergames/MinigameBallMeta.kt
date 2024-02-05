@@ -6,7 +6,7 @@ import com.github.shynixn.blockball.api.persistence.entity.*
 import com.github.shynixn.blockball.entity.MovementConfigurationEntity
 import net.griefergames.minigame.shared.model.MinigameLobby
 
-class MinigameBallMeta(val lobby: MinigameLobby) : BallMeta {
+class MinigameBallMeta(val lobby: MinigameLobby, val arena: MinigameArena) : BallMeta {
     override var enabledKick: Boolean = true
     override var itemNbt: String? = ""
     override var itemType: String = "PLAYER_HEAD,397"
@@ -15,7 +15,8 @@ class MinigameBallMeta(val lobby: MinigameLobby) : BallMeta {
     override var isSlimeVisible: Boolean = false
     override var enabledInteract: Boolean = true
     override var delayInTicks: Int = 0
-    override var spawnpoint: Position? = null
+    override var spawnpoint: Position? get() = arena.center
+        set(value) {}
     override var size: BallSize = BallSize.NORMAL
     override var skin: String = "http://textures.minecraft.net/texture/8e4a70b7bbcd7a8c322d522520491a27ea6b83d60ecf961d2b4efbbf9f605d"
     override var rotating: Boolean = true

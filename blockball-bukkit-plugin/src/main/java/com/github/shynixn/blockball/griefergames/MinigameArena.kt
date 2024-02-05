@@ -24,7 +24,7 @@ class MinigameArena(
     override var enabled: Boolean = true
     override var displayName: String = map.name
     override var gameType: GameType = GameType.MINIGAME
-    override val meta: ArenaMeta = MinigameArenaMeta(lobby)
+    override val meta: ArenaMeta = MinigameArenaMeta(lobby, this)
     override var upperCorner: Position = MinigamePosition(map.minLocation)
     override var lowerCorner: Position = MinigamePosition(map.maxLocation)
     override val center: Position get() {
@@ -129,7 +129,7 @@ class MinigameArena(
         this.lowerCorner = PositionEntity(corner1.worldName!!, x.toDouble(), y.toDouble(), z.toDouble())
     }
 
-    class MinigameArenaMeta(private val lobby: MinigameLobby) : ArenaMeta {
+    class MinigameArenaMeta(private val lobby: MinigameLobby, val arena: MinigameArena) : ArenaMeta {
 
         override val hubLobbyMeta: HubLobbyMeta = HubLobbyMetaEntity()
         override val spectatorMeta: SpectatorMeta = SpectatorMetaEntity().apply {
@@ -193,7 +193,7 @@ class MinigameArena(
             }
         }
         override val hologramMetas: MutableList<HologramMeta> = mutableListOf()
-        override val ballMeta: BallMeta = MinigameBallMeta(lobby)
+        override val ballMeta: BallMeta = MinigameBallMeta(lobby, this.arena)
         override val protectionMeta: ArenaProtectionMeta = ArenaProtectionMetaEntity()
         override val rewardMeta: RewardMeta = RewardEntity().apply {
             this.moneyReward.clear()

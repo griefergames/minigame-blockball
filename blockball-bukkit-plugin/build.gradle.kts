@@ -151,7 +151,9 @@ dependencies {
     //testImplementation("org.spigotmc:spigot:1.16.4-R0.1-SNAPSHOT")
     testImplementation(ggcloud.paper.api)
 }
-
+tasks.build {
+    dependsOn(tasks.getByName("shadowJar"))
+}
 tasks.register("languageFile") {
     val kotlinSrcFolder = project.sourceSets.toList()[0].allJava.srcDirs.first { e -> e.endsWith("java") }
     val languageKotlinFile = kotlinSrcFolder.resolve("com/github/shynixn/blockball/BlockBallLanguage.kt")

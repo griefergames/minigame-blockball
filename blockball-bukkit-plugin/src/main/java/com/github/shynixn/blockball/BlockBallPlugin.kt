@@ -108,16 +108,16 @@ class BlockBallPlugin : JavaPlugin(), PluginProxy, Listener {
             )
         }
 
-        if (!Version.serverVersion.isCompatible(*versions)) {
-            logger.log(Level.SEVERE, "================================================")
-            logger.log(Level.SEVERE, "BlockBall does not support your server version")
-            logger.log(Level.SEVERE, "Install v" + versions[0].id + " - v" + versions[versions.size - 1].id)
-            logger.log(Level.SEVERE, "Need support for a particular version? Go to https://www.patreon.com/Shynixn")
-            logger.log(Level.SEVERE, "Plugin gets now disabled!")
-            logger.log(Level.SEVERE, "================================================")
-            Bukkit.getPluginManager().disablePlugin(this)
-            return
-        }
+//        if (!Version.serverVersion.isCompatible(*versions)) {
+//            logger.log(Level.SEVERE, "================================================")
+//            logger.log(Level.SEVERE, "BlockBall does not support your server version")
+//            logger.log(Level.SEVERE, "Install v" + versions[0].id + " - v" + versions[versions.size - 1].id)
+//            logger.log(Level.SEVERE, "Need support for a particular version? Go to https://www.patreon.com/Shynixn")
+//            logger.log(Level.SEVERE, "Plugin gets now disabled!")
+//            logger.log(Level.SEVERE, "================================================")
+//            Bukkit.getPluginManager().disablePlugin(this)
+//            return
+//        }
 
         this.packetService = PacketServiceImpl(this)
         this.injector = Guice.createInjector(BlockBallDependencyInjectionBinder(this, packetService!!))
@@ -149,18 +149,18 @@ class BlockBallPlugin : JavaPlugin(), PluginProxy, Listener {
         commandService.registerCommandExecutor("blockballstop", resolve(StopCommandExecutor::class.java))
         commandService.registerCommandExecutor("blockballreload", resolve(ReloadCommandExecutor::class.java))
         commandService.registerCommandExecutor("blockball", resolve(ArenaCommandExecutor::class.java))
-        commandService.registerCommandExecutor(
-            (config.get("global-spectate") as MemorySection).getValues(false) as Map<String, String>,
-            resolve(SpectateCommandExecutor::class.java)
-        )
-        commandService.registerCommandExecutor(
-            (config.get("global-leave") as MemorySection).getValues(false) as Map<String, String>,
-            resolve(LeaveCommandExecutor::class.java)
-        )
-        commandService.registerCommandExecutor(
-            (config.get("global-join") as MemorySection).getValues(false) as Map<String, String>,
-            resolve(JoinCommandExecutor::class.java)
-        )
+//        commandService.registerCommandExecutor(
+//            (config.get("global-spectate") as MemorySection).getValues(false) as Map<String, String>,
+//            resolve(SpectateCommandExecutor::class.java)
+//        )
+//        commandService.registerCommandExecutor(
+//            (config.get("global-leave") as MemorySection).getValues(false) as Map<String, String>,
+//            resolve(LeaveCommandExecutor::class.java)
+//        )
+//        commandService.registerCommandExecutor(
+//            (config.get("global-join") as MemorySection).getValues(false) as Map<String, String>,
+//            resolve(JoinCommandExecutor::class.java)
+//        )
 
         if (enableMetrics) {
             Metrics(this, bstatsPluginId)
