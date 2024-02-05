@@ -184,10 +184,9 @@ class BlockSelectionServiceImpl @Inject constructor(
             throw IllegalArgumentException("Player has to be a BukkitPlayer!")
         }
 
-        for (i in 0..player.inventory.contents.size) {
-            if (player.inventory.contents[0] != null) {
-                val item = player.inventory.contents[0]
-
+        for (i in 0..player.inventory.contents!!.size) {
+            val item = player.inventory.contents!![0]
+            if (item != null) {
                 if (itemTypeService.findItemType<Any>(item.type) == itemTypeService.findItemType(MaterialType.GOLDEN_AXE) && item.itemMeta!!.displayName != null
                     && item.itemMeta!!.displayName.stripChatColors() == this.axeName.stripChatColors()
                 ) {

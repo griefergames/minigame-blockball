@@ -2,6 +2,7 @@ package unittest
 
 import com.github.shynixn.blockball.api.business.service.BlockSelectionService
 import com.github.shynixn.blockball.impl.listener.BlockSelectionListener
+import net.kyori.adventure.text.Component
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
@@ -207,7 +208,7 @@ class BlockSelectionListenerTest {
         val mockedBlockSelectionService = MockedBlockSelectionService()
         val classUnderTest = createWithDependencies(mockedBlockSelectionService)
         val player = Mockito.mock(Player::class.java)
-        val playerQuitEvent = PlayerQuitEvent(player, null)
+        val playerQuitEvent = PlayerQuitEvent(player, Component.empty())
 
         // Act
         classUnderTest.onPlayerQuitEvent(playerQuitEvent)

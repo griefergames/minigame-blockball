@@ -192,7 +192,7 @@ class ProxyServiceImpl @Inject constructor(
             throw IllegalArgumentException("Player has to be a BukkitPlayer!")
         }
 
-        return player.inventory.contents.clone() as Array<Any?>
+        return player.inventory.contents!!.clone() as Array<Any?>
     }
 
     /**
@@ -203,7 +203,7 @@ class ProxyServiceImpl @Inject constructor(
             throw IllegalArgumentException("Player has to be a BukkitPlayer!")
         }
 
-        return player.inventory.armorContents.clone() as Array<Any?>
+        return player.inventory.armorContents!!.clone() as Array<Any?>
     }
 
     /**
