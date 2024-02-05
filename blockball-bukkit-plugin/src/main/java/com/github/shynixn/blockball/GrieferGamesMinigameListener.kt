@@ -2,6 +2,7 @@ package com.github.shynixn.blockball
 
 import com.github.shynixn.blockball.api.business.service.GameActionService
 import com.github.shynixn.blockball.api.business.service.GameService
+import com.github.shynixn.blockball.api.persistence.entity.Arena
 import com.github.shynixn.blockball.api.persistence.entity.Game
 import com.github.shynixn.blockball.event.GameEndEvent
 import com.github.shynixn.blockball.event.GameGoalEvent
@@ -17,6 +18,7 @@ import net.griefergames.minigame.minigameService
 import net.griefergames.minigame.toBukkitGameLocation
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.i18n
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -28,6 +30,7 @@ class GrieferGamesMinigameListener @Inject constructor(
 ): Listener {
 
     private var theGame: Game? = null
+    private var arena: MinigameArena? = null
 
     private val preSpawn by lazy {
         minigameService.getMinigameLobby()?.map?.locations?.get("pre_spawn")
@@ -42,13 +45,20 @@ class GrieferGamesMinigameListener @Inject constructor(
         preSpawn?.let {
             event.player.teleport(it.toBukkitGameLocation())
         }
-        gameActionService.joinGame(theGame!!, event.player, null)
     }
 
     @EventHandler
     fun onMinigameReadyToStart(event: MinigameReadyToStartEvent) {
-        theGame!!.arena.meta.redTeamMeta.minAmount = (event.lobby.maxPlayers / 2) - 1
-        theGame!!.arena.meta.blueTeamMeta.minAmount = (event.lobby.maxPlayers / 2) - 1
+        val updatedLobby = minigameService.getMinigameLobby(true) ?: return
+        arena!!.setCorrectPlayerAmount(updatedLobby)
+        (gameService as GameServiceImpl).initGame(arena!!)
+        theGame = gameService.getAllGames().lastOrNull { it.arena == arena } ?: return
+        Bukkit.getOnlinePlayers().forEach {
+            if(updatedLobby.players.contains(it.uniqueId.toString())) {
+                gameActionService.joinGame(theGame!!, it, null)
+            }
+        }
+        updateScores()
     }
 
     @EventHandler
@@ -78,7 +88,10 @@ class GrieferGamesMinigameListener @Inject constructor(
 
     @EventHandler
     fun onGameEnd(event: GameEndEvent) {
-        if(event.game != theGame) return
+        if(event.game.arena !is MinigameArena) {
+            println("OTHER GAME ENDED")
+            return
+        }
         updateScores();
         val winningTeam = event.winningTeam
         minigameService.setGameFinished(true)
@@ -90,12 +103,10 @@ class GrieferGamesMinigameListener @Inject constructor(
     private fun prepareGame() {
         val minigameLobby = minigameService.getMinigameLobby(true) ?: return
         val loadedMinigameMap = minigameLobby.map ?: return
-        val arena = MinigameArena(minigameLobby)
+        arena = MinigameArena(minigameLobby)
         gameService.getAllGames().forEach {
             it.closed = true
         }
-        (gameService as GameServiceImpl).initGame(arena)
-        theGame = gameService.getAllGames().lastOrNull { it.arena == arena } ?: return
     }
 
     private fun runEndGame() {

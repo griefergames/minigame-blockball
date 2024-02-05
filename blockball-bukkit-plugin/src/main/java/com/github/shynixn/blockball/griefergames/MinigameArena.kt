@@ -31,7 +31,7 @@ class MinigameArena(
         return PositionEntity(
             this.lowerCorner.worldName!!,
             (this.lowerCorner.blockX + this.offsetX / 2).toDouble(),
-            (this.lowerCorner.blockY + offsetX / 2).toDouble(), (this.lowerCorner.blockZ + offsetZ / 2).toDouble()
+            this.lowerCorner.y + 1.3, (this.lowerCorner.blockZ + offsetZ / 2).toDouble()
         )
     }
     override val offsetX: Int get() {
@@ -129,6 +129,11 @@ class MinigameArena(
         this.lowerCorner = PositionEntity(corner1.worldName!!, x.toDouble(), y.toDouble(), z.toDouble())
     }
 
+    fun setCorrectPlayerAmount(lobby: MinigameLobby) {
+        meta.redTeamMeta.minAmount = ((lobby.players.size / 2) - 1).coerceAtLeast(1)
+        meta.blueTeamMeta.minAmount = ((lobby.players.size / 2) - 1).coerceAtLeast(1)
+    }
+
     class MinigameArenaMeta(private val lobby: MinigameLobby, val arena: MinigameArena) : ArenaMeta {
 
         override val hubLobbyMeta: HubLobbyMeta = HubLobbyMetaEntity()
@@ -142,24 +147,24 @@ class MinigameArena(
 
         override val redTeamMeta: TeamMeta = TeamMetaEntity(
             displayName = "Red Team",
-            prefix = "RED"
+            prefix = "§c"
         ).apply {
             val location1 = lobby.map.locations.get("red_goal_1")?.let { MinigamePosition(it) }!!
             val location2 = lobby.map.locations.get("red_goal_2")?.let { MinigamePosition(it) }!!
             this.goal.setCorners(location1, location2)
             this.minAmount = lobby.maxPlayers
             this.maxAmount = (lobby.maxPlayers / 2)
-            this.armorContents[1] = ItemStack(Material.IRON_CHESTPLATE).apply {
+            this.armorContents[2] = ItemStack(Material.IRON_CHESTPLATE).apply {
                 this.itemMeta = this.itemMeta.apply {
                     (this as ArmorMeta).trim = ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.WARD)
                 }
             }
-            this.armorContents[2] = ItemStack(Material.IRON_LEGGINGS).apply {
+            this.armorContents[1] = ItemStack(Material.IRON_LEGGINGS).apply {
                 this.itemMeta = this.itemMeta.apply {
                     (this as ArmorMeta).trim = ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.WARD)
                 }
             }
-            this.armorContents[3] = ItemStack(Material.LEATHER_BOOTS).apply {
+            this.armorContents[0] = ItemStack(Material.LEATHER_BOOTS).apply {
                 this.itemMeta = this.itemMeta.apply {
                     (this as LeatherArmorMeta).setColor(Color.BLACK)
                     (this as ArmorMeta).trim = ArmorTrim(TrimMaterial.QUARTZ, TrimPattern.SHAPER)
@@ -168,24 +173,24 @@ class MinigameArena(
         }
         override val blueTeamMeta: TeamMeta = TeamMetaEntity(
             displayName = "Blue Team",
-            prefix = "BLUE"
+            prefix = "§9"
         ).apply {
             val location1 = lobby.map.locations.get("blue_goal_1")?.let { MinigamePosition(it) }!!
             val location2 = lobby.map.locations.get("blue_goal_2")?.let { MinigamePosition(it) }!!
             this.goal.setCorners(location1, location2)
             this.minAmount = lobby.maxPlayers
             this.maxAmount = (lobby.maxPlayers / 2)
-            this.armorContents[1] = ItemStack(Material.IRON_CHESTPLATE).apply {
+            this.armorContents[2] = ItemStack(Material.IRON_CHESTPLATE).apply {
                 this.itemMeta = this.itemMeta.apply {
                     (this as ArmorMeta).trim = ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WARD)
                 }
             }
-            this.armorContents[2] = ItemStack(Material.IRON_LEGGINGS).apply {
+            this.armorContents[1] = ItemStack(Material.IRON_LEGGINGS).apply {
                 this.itemMeta = this.itemMeta.apply {
                     (this as ArmorMeta).trim = ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WARD)
                 }
             }
-            this.armorContents[3] = ItemStack(Material.LEATHER_BOOTS).apply {
+            this.armorContents[0] = ItemStack(Material.LEATHER_BOOTS).apply {
                 this.itemMeta = this.itemMeta.apply {
                     (this as LeatherArmorMeta).setColor(Color.BLACK)
                     (this as ArmorMeta).trim = ArmorTrim(TrimMaterial.QUARTZ, TrimPattern.SHAPER)

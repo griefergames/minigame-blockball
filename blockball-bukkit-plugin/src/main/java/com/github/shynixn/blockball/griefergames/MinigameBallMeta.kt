@@ -15,7 +15,9 @@ class MinigameBallMeta(val lobby: MinigameLobby, val arena: MinigameArena) : Bal
     override var isSlimeVisible: Boolean = false
     override var enabledInteract: Boolean = true
     override var delayInTicks: Int = 0
-    override var spawnpoint: Position? get() = arena.center
+    override var spawnpoint: Position? get() = arena.center.apply {
+        this.y = arena.lowerCorner.y
+    }
         set(value) {}
     override var size: BallSize = BallSize.NORMAL
     override var skin: String = "http://textures.minecraft.net/texture/8e4a70b7bbcd7a8c322d522520491a27ea6b83d60ecf961d2b4efbbf9f605d"
