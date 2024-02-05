@@ -45,7 +45,12 @@ class MinigameArena(
     }
 
     init {
-        setCorners(MinigamePosition(map.minLocation), MinigamePosition(map.maxLocation))
+        val spawns = map.locations.entries.filter { it.key.startsWith("spawn_") }
+        if(spawns.size >= 2) {
+            setCorners(MinigamePosition(spawns.first().value), MinigamePosition(spawns.last().value))
+        }else {
+            setCorners(MinigamePosition(map.minLocation), MinigamePosition(map.maxLocation))
+        }
     }
 
     override fun isLocationInSelection(location: Position): Boolean {

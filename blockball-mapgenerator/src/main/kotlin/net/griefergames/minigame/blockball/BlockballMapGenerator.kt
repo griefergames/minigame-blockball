@@ -66,7 +66,25 @@ class BlockballMapGenerator : MapGenerator {
 
         blockList[Material.DISPENSER.name]?.forEach {
             replacements[it] = Material.AIR.name
-            map.locations["pre_spawn"] = it.apply {
+            map.locations["pre_spawn"] = it.clone().apply {
+                this.x += 0.5
+                this.z += 0.5
+            }
+        }
+        var spawnCounter = 0
+        blockList[Material.DROPPER.name]?.forEach {
+            spawnCounter++
+            replacements[it] = Material.AIR.name
+            map.locations["spawnCounter_$spawnCounter"] = it.clone().apply {
+                this.x += 0.5
+                this.z += 0.5
+            }
+        }
+        var edgeCounter = 0
+        blockList[Material.FURNACE.name]?.forEach {
+            spawnCounter++
+            replacements[it] = Material.AIR.name
+            map.locations["spawn_$spawnCounter"] = it.clone().apply {
                 this.x += 0.5
                 this.z += 0.5
             }
