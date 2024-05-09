@@ -296,7 +296,7 @@ class GameSoccerServiceImpl @Inject constructor(
      * Gets called when the given [game] gets win by the given [team].
      */
     override fun onWin(game: Game, team: Team, teamMeta: TeamMeta) {
-        val event =GameEndEvent(team, game)
+        val event = GameEndEvent(team, game)
         Bukkit.getPluginManager().callEvent(event)
 
         if (event.isCancelled) {

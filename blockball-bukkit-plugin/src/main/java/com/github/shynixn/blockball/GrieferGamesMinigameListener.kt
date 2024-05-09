@@ -22,6 +22,7 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.scoreboard.Team
 import java.util.UUID
 
 class GrieferGamesMinigameListener @Inject constructor(
@@ -73,23 +74,38 @@ class GrieferGamesMinigameListener @Inject constructor(
 
     @EventHandler
     fun onGoal(event: GameGoalEvent) {
-        if(event.game == theGame) {
-            updateScores()
+        val teamName = if(event.team == com.github.shynixn.blockball.api.business.enumeration.Team.RED) {
+            "${event.game.arena.meta.redTeamMeta.prefix}${event.game.arena.meta.redTeamMeta.displayName}"
+        } else {
+            "${event.game.arena.meta.blueTeamMeta.prefix}${event.game.arena.meta.redTeamMeta.displayName}"
         }
+        Bukkit.broadcast(i18n("minigame.game.blockball.goal", event.player?.name ?: "?", teamName))
+        Bukkit.broadcast(i18n("minigame.game.blockball.current_stats",
+            "${event.game.arena.meta.redTeamMeta.prefix}${event.game.redScore}",
+            "${event.game.arena.meta.blueTeamMeta.prefix}${event.game.blueScore}"))
+        updateScores()
+    }
+
+    private fun updateTime() {
+        //@TODO: Implement
+        minigameService.scoreboardService.setSlot4Title(i18n("minigame.game.blockball.current_time"))
+        minigameService.scoreboardService.setSlot4Value(i18n("minigame.game.blockball.current_time_value",
+
+        ))
     }
 
     private fun updateScores() {
         minigameService.scoreboardService.setSlot3Title(i18n("minigame.game.blockball.current_score"))
         minigameService.scoreboardService.setSlot3Value(i18n("minigame.game.blockball.current_score_value",
-            Component.text("§c${theGame?.redScore ?: 0}"),
-            Component.text("§9${theGame?.blueScore ?: 0 }")
+            Component.text("${theGame?.arena?.meta?.redTeamMeta?.prefix ?: "§c"}${theGame?.redScore ?: 0}"),
+            Component.text("${theGame?.arena?.meta?.blueTeamMeta?.prefix ?: "§9"}${theGame?.blueScore ?: 0 }")
         ))
     }
 
     @EventHandler
     fun onGameEnd(event: GameEndEvent) {
         if(event.game.arena !is MinigameArena) {
-            println("OTHER GAME ENDED")
+            Bukkit.broadcast(Component.text("OTHER GAME ENDED"))
             return
         }
         updateScores();

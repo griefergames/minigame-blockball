@@ -208,10 +208,10 @@ class MinigameArena(
             this.enabled = false
         }
         override val bossBarMeta: BossBarMeta = BossBarMetaEntity().apply {
-            this.enabled = false
+            this.enabled = true
         }
         override val doubleJumpMeta: DoubleJumpMeta = DoubleJumpMetaEntity().apply {
-
+            this.enabled = false
         }
         override val customizingMeta: CustomizationMeta = CustomizationMetaEntity().apply {
 
