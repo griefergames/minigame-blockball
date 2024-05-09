@@ -1,10 +1,11 @@
-# BlockBall  [![Build Status](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.blockball/blockball-api/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.blockball/blockball-api) [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat-square)](https://raw.githubusercontent.com/Shynixn/BlockBall/master/LICENSE)
+# BlockBall
 
 
-| branch        | status        |  version | download |
-| ------------- | ------------- |  --------| ---------| 
-| master        | [![Build Status](https://github.com/Shynixn/BlockBall/workflows/CI/badge.svg?branch=master)](https://github.com/Shynixn/BlockBall/actions) | ![GitHub license](https://img.shields.io/nexus/r/https/oss.sonatype.org/com.github.shynixn.blockball/blockball-bukkit-plugin.svg?style=flat-square)  |[Download latest release](https://github.com/Shynixn/BlockBall/releases)|
-| development   | [![Build Status](https://github.com/Shynixn/BlockBall/workflows/CI/badge.svg?branch=development)](https://github.com/Shynixn/BlockBall/actions)|![GitHub license](https://img.shields.io/nexus/s/https/oss.sonatype.org/com.github.shynixn.blockball/blockball-bukkit-plugin.svg?style=flat-square) |  [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/blockball/blockball-bukkit-plugin/) |
+| branch        | status        |  download |
+| ------------- | ------------- |   ---------| 
+| master        | [![Build Status](https://github.com/Shynixn/BlockBall/workflows/CI/badge.svg?branch=master)](https://github.com/Shynixn/BlockBall/actions)   |[Download latest release](https://github.com/Shynixn/BlockBall/releases)|
+| development        | [![Build Status](https://github.com/Shynixn/BlockBall/workflows/CI/badge.svg?branch=master)](https://github.com/Shynixn/BlockBall/actions)   ||
+
 ## Description
 
 BlockBall is a spigot plugin to play soccer games in Minecraft.
@@ -49,27 +50,3 @@ docker rm -f blockball-dependencies-jdk17
 ````
 
 * Open the project with an IDE, gradle sync for dependencies.
-
-### Testing
-
-#### Option 1
-
-* Setup your own minecraft server
-* Change ``// val destinationDir = File("C:/temp/plugins")`` to your plugins folder in the ``structureblocklib-bukkit-sample/build.gradle.kts`` file.
-* Run the ``pluginJar`` task to generate a plugin.jar file.
-* Run your minecraft server
-
-#### Option 2 :whale:
-
-* Run the provided docker file.
-* The source code is copied to a new docker container and built to a plugin.
-* This plugin is installed on a new minecraft server which is accessible on the host machine on the default port on ``localhost``.
-
-````sh
-docker build -t blockball .
-docker run --name=blockball -p 25565:25565 -p 5005:5005 blockball
-````
-
-## Licence
-
-The source code is licensed under the Apache 2.0 license.

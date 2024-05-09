@@ -13,6 +13,9 @@ pluginManagement {
         maven("https://repo.papermc.io/repository/maven-public/")
         gradlePluginPortal()
     }
+    plugins {
+        kotlin("jvm") version "1.6.21"
+    }
 }
 dependencyResolutionManagement {
     repositories {
